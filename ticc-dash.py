@@ -10,6 +10,9 @@ import time
 from collections import deque
 
 use_sudo = os.getenv("CHRONY_USE_SUDO", "true").lower() in ("true", "1")
+# Already root: sudo adds nothing, but would still log every call
+if use_sudo and os.geteuid() == 0:
+    use_sudo = False
 chrony_socket = os.getenv("CHRONY_SOCKET")
 
 def chronyc_cmd(*args):
